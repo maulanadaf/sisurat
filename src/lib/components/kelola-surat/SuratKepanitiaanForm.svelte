@@ -63,11 +63,28 @@
     let tempatKegiatan = $state(initialData?.tempatKegiatan ?? "");
     let paragrafPembuka = $state(
         initialData?.paragrafPembuka ??
-            "Merujuk pada program kerja UKM Kewirausahaan Yadika Pasuruan, kami bermaksud untuk menyelenggarakan kegiatan:",
+            "Dalam rangka pelaksanaan kegiatan ..., maka dari itu kami selaku panitia acara ... untuk kegiatan yang akan diselenggarakan pada:",
     );
+
+    let previousNamaKegiatan = $state(initialData?.namaKegiatan ?? "");
+    // Auto-sync nama kegiatan ke paragraf pembuka (hanya ketika namaKegiatan berubah)
+    $effect(() => {
+        if (namaKegiatan !== previousNamaKegiatan) {
+            if (
+                paragrafPembuka.startsWith("Dalam rangka pelaksanaan kegiatan")
+            ) {
+                let oldText = previousNamaKegiatan || "...";
+                paragrafPembuka = paragrafPembuka.replace(
+                    `Dalam rangka pelaksanaan kegiatan ${oldText}`,
+                    `Dalam rangka pelaksanaan kegiatan ${namaKegiatan || "..."}`,
+                );
+            }
+            previousNamaKegiatan = namaKegiatan;
+        }
+    });
     let paragrafPenutup = $state(
         initialData?.paragrafPenutup ??
-            "Demikian surat ini kami sampaikan. Atas perhatian dan kerjasamanya kami ucapkan terima kasih.",
+            "Sehubungan dengan itu, demi kelancaran dan terlaksananya kegiatan ini kami mohon kesediaannya untuk dapat memberikan izin ... tersebut.",
     );
 
     let isPeminjaman = $state(initialData?.isPeminjaman ?? false);

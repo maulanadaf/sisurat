@@ -117,7 +117,7 @@
         </div>
 
         <!-- Filter Kategori -->
-        <div class="flex gap-2 shrink-0">
+        <div class="flex flex-wrap gap-2 shrink-0 pb-1 sm:pb-0">
             {#each kategoriList as kat}
                 <button
                     onclick={() => (filterKategori = kat)}
@@ -134,10 +134,10 @@
 
     <!-- Tabel Arsip -->
     <div
-        class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+        class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden w-full"
     >
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
+        <div class="overflow-x-auto w-full custom-scrollbar">
+            <table class="w-full text-sm text-left min-w-[800px]">
                 <thead
                     class="bg-slate-100/80 text-slate-600 uppercase text-[11px] font-bold"
                 >
@@ -148,6 +148,7 @@
                         <th class="px-6 py-4">Perihal</th>
                         <th class="px-6 py-4">Kategori</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
+                        <th class="w-6 shrink-0"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -187,7 +188,7 @@
                                     {surat.kategori}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-0 py-4">
                                 <div
                                     class="flex items-center justify-center gap-2"
                                 >
@@ -268,6 +269,7 @@
                                     </button>
                                 </div>
                             </td>
+                            <td class="w-6 shrink-0"></td>
                         </tr>
                     {/each}
 
@@ -326,3 +328,20 @@
         {/if}
     </div>
 </div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+</style>

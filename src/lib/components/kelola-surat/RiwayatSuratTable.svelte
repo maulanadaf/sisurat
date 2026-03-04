@@ -67,6 +67,7 @@
                     <th class="px-6 py-4">Perihal</th>
                     <th class="px-6 py-4">Status</th>
                     <th class="px-6 py-4 text-center">Aksi</th>
+                    <th class="w-6 shrink-0"></th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -96,7 +97,7 @@
                                 {surat.status}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 w-[140px]">
                             <div class="flex items-center justify-center gap-2">
                                 <!-- Tombol Lihat / Cetak -->
                                 <button
@@ -176,6 +177,7 @@
                                 </button>
                             </div>
                         </td>
+                        <td class="w-6 shrink-0"></td>
                     </tr>
                 {/each}
                 {#if data.length === 0}

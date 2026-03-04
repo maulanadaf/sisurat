@@ -41,7 +41,7 @@
 
         <!-- Main Content Area -->
         <main
-            class="flex-1 w-full transition-all duration-300 ease-in-out md:ml-[280px] relative min-h-screen flex flex-col"
+            class="flex-1 min-w-0 transition-all duration-300 ease-in-out md:ml-[280px] relative min-h-screen flex flex-col"
         >
             <!-- Mobile Header (Visible only on medium screens and below) -->
             <header

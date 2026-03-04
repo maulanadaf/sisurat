@@ -25,6 +25,8 @@
 
 <svelte:head>
     <title>Cetak Surat - {surat.nomor_surat_full || "Untitled"}</title>
+    <!-- Kunci viewport ke lebar tetap agar ukuran kertas tidak berubah saat browser di-zoom -->
+    <meta name="viewport" content="width=900, initial-scale=1.0" />
 </svelte:head>
 
 <!-- Tombol Cetak Manual (Hanya tampil di layar) -->
@@ -100,19 +102,24 @@
         margin: 0;
     }
 
-    /* Tampilan Lembar Kertas di Layar Monitor */
+    /* Tampilan di layar: kertas diunci ke px absolut agar tidak terpengaruh zoom browser */
     @media screen {
+        .page-container {
+            overflow-x: auto; /* Scroll horizontal jika viewport lebih kecil dari kertas */
+        }
+
         .paper {
-            width: 215mm;
-            min-height: 330mm;
-            margin: 0 auto;
+            /* 215mm = 813px, 330mm = 1247px pada 96dpi */
+            width: 813px;
+            min-height: 1247px;
+            flex-shrink: 0;
             position: relative;
         }
     }
 
-    /* Jarak Margin Kertas (kiri/kanan/atas/bawah) */
+    /* Margin dalam kertas (px): 2cm=76px, 0.75cm=28px */
     .content-wrapper {
-        padding: 0.75cm 2cm 2cm 2cm; /* Margin dalam kertas F4 */
+        padding: 28px 76px 76px 76px;
         width: 100%;
         box-sizing: border-box;
     }
@@ -129,11 +136,22 @@
             display: none !important;
         }
 
+        .page-container {
+            overflow: visible !important;
+            padding: 0 !important;
+            background: white !important;
+        }
+
         .paper {
             box-shadow: none !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
+            /* Saat cetak: gunakan mm agar akurasi printer terjaga */
+            width: 215mm !important;
+            min-height: 330mm !important;
+            margin: 0 auto !important;
+        }
+
+        .content-wrapper {
+            padding: 0.75cm 2cm 2cm 2cm !important;
         }
     }
 </style>
