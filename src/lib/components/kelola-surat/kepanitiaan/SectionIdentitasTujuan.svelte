@@ -43,7 +43,7 @@
                 <span class="text-slate-400 font-bold">/</span>
                 <select
                     bind:value={jenisSurat}
-                    class="flex h-10 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shrink-0 w-[160px]"
+                    class="flex h-10 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shrink-0 w-[220px]"
                 >
                     <option value="SK">SK (Surat Keputusan)</option>
                     <option value="SU">SU (Surat Undangan)</option>
@@ -67,7 +67,7 @@
                     bind:value={singkatanKegiatan}
                     placeholder="Singkatan Kegiatan"
                     required
-                    class="flex-1 min-w-[120px] bg-slate-50 focus:border-emerald-500"
+                    class="flex-1 min-w-[100px] bg-slate-50 focus:border-emerald-500"
                 />
                 <span class="text-slate-400 font-bold shrink-0">/</span>
                 <Input

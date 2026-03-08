@@ -11,7 +11,11 @@
     const ttdKanan =
         penandatangan.find((p) => p.posisi_label === "Kanan") || {};
     const mengetahuiKiri =
-        penandatangan.find((p) => p.posisi_label === "Mengetahui-Kiri") || {};
+        penandatangan.find(
+            (p) =>
+                p.posisi_label === "Mengetahui-Kiri" ||
+                p.posisi_label === "Mengetahui",
+        ) || {};
     const mengetahuiKanan =
         penandatangan.find((p) => p.posisi_label === "Mengetahui-Kanan") || {};
 
@@ -78,12 +82,16 @@
                     paragrafPenutup={konten?.paragraf_penutup}
                     ttdKiriTeks={ttdKiri.jabatan_teks}
                     ttdKiriNama={ttdKiri.nama_lengkap}
+                    ttdKiriUrl={ttdKiri.ttd_url}
                     ttdKananTeks={ttdKanan.jabatan_teks}
                     ttdKananNama={ttdKanan.nama_lengkap}
+                    ttdKananUrl={ttdKanan.ttd_url}
                     mengetahuiKiriTeks={mengetahuiKiri.jabatan_teks}
                     mengetahuiKiriNama={mengetahuiKiri.nama_lengkap}
+                    mengetahuiKiriUrl={mengetahuiKiri.ttd_url}
                     mengetahuiKananTeks={mengetahuiKanan.jabatan_teks}
                     mengetahuiKananNama={mengetahuiKanan.nama_lengkap}
+                    mengetahuiKananUrl={mengetahuiKanan.ttd_url}
                     daftarAlat={data.alat.map((a, i) => ({
                         id: i + 1,
                         nama: a.nama_alat,

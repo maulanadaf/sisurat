@@ -92,10 +92,19 @@
         initialData?.ttdKiriTeks ?? "Ketua UKM Kewirausahaan",
     );
     let ttdKiriNama = $state(initialData?.ttdKiriNama ?? "");
+    let ttdKiriUrl = $state(initialData?.ttdKiriUrl ?? "");
+
     let ttdKananTeks = $state(
-        initialData?.ttdKananTeks ?? "Pembina UKM Kewirausahaan",
+        initialData?.ttdKananTeks ?? "Sekretaris UKM Kewirausahaan",
     );
     let ttdKananNama = $state(initialData?.ttdKananNama ?? "");
+    let ttdKananUrl = $state(initialData?.ttdKananUrl ?? "");
+
+    let mengetahuiTeks = $state(
+        initialData?.mengetahuiTeks ?? "Pembina UKM Kewirausahaan",
+    );
+    let mengetahuiNama = $state(initialData?.mengetahuiNama ?? "");
+    let mengetahuiUrl = $state(initialData?.mengetahuiUrl ?? "");
     // === END: State Formulir ===
 
     function handleSubmit(e) {
@@ -122,11 +131,19 @@
                     posisi_label: "Kiri",
                     jabatan_teks: ttdKiriTeks,
                     nama_lengkap: ttdKiriNama,
+                    ttd_url: ttdKiriUrl,
                 },
                 {
                     posisi_label: "Kanan",
                     jabatan_teks: ttdKananTeks,
                     nama_lengkap: ttdKananNama,
+                    ttd_url: ttdKananUrl,
+                },
+                {
+                    posisi_label: "Mengetahui",
+                    jabatan_teks: mengetahuiTeks,
+                    nama_lengkap: mengetahuiNama,
+                    ttd_url: mengetahuiUrl,
                 },
             ],
         });
@@ -192,8 +209,13 @@
             <SectionPenandatangan
                 {ttdKiriTeks}
                 bind:ttdKiriNama
+                bind:ttdKiriUrl
                 {ttdKananTeks}
                 bind:ttdKananNama
+                bind:ttdKananUrl
+                {mengetahuiTeks}
+                bind:mengetahuiNama
+                bind:mengetahuiUrl
             />
         </div>
 

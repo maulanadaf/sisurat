@@ -13,7 +13,7 @@
     <div class="flex items-center gap-4">
         <button
             onclick={() => goto("/kelola-surat")}
-            class="p-2 h-10 w-10 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm flex items-center justify-center"
+            class="p-2 h-10 w-10 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm flex items-center justify-center cursor-pointer"
             title="Kembali ke Kelola Surat"
         >
             <svg

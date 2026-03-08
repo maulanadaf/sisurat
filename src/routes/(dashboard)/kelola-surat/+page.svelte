@@ -69,7 +69,7 @@
                         onclick={() => {
                             goto("/kelola-surat/buat");
                         }}
-                        class="gap-2 font-semibold bg-emerald-600 hover:bg-emerald-700 text-white border-transparent"
+                        class="gap-2 font-semibold bg-emerald-600 hover:bg-emerald-700 text-white border-transparent cursor-pointer"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

@@ -94,19 +94,23 @@
 
     let ttdKiriTeks = $state(initialData?.ttdKiriTeks ?? "Ketua Pelaksana");
     let ttdKiriNama = $state(initialData?.ttdKiriNama ?? "");
+    let ttdKiriUrl = $state(initialData?.ttdKiriUrl ?? "");
     let ttdKananTeks = $state(
         initialData?.ttdKananTeks ?? "Sekretaris Pelaksana",
     );
     let ttdKananNama = $state(initialData?.ttdKananNama ?? "");
+    let ttdKananUrl = $state(initialData?.ttdKananUrl ?? "");
 
     let mengetahuiKiriTeks = $state(
         initialData?.mengetahuiKiriTeks ?? "Ketua UKM Kewirausahaan",
     );
     let mengetahuiKiriNama = $state(initialData?.mengetahuiKiriNama ?? "");
+    let mengetahuiKiriUrl = $state(initialData?.mengetahuiKiriUrl ?? "");
     let mengetahuiKananTeks = $state(
         initialData?.mengetahuiKananTeks ?? "Pembina UKM Kewirausahaan",
     );
     let mengetahuiKananNama = $state(initialData?.mengetahuiKananNama ?? "");
+    let mengetahuiKananUrl = $state(initialData?.mengetahuiKananUrl ?? "");
     // === END: State Formulir ===
 
     function handleSubmit(e) {
@@ -135,21 +139,25 @@
                     posisi_label: "Kiri",
                     jabatan_teks: ttdKiriTeks,
                     nama_lengkap: ttdKiriNama,
+                    ttd_url: ttdKiriUrl,
                 },
                 {
                     posisi_label: "Kanan",
                     jabatan_teks: ttdKananTeks,
                     nama_lengkap: ttdKananNama,
+                    ttd_url: ttdKananUrl,
                 },
                 {
                     posisi_label: "Mengetahui-Kiri",
                     jabatan_teks: mengetahuiKiriTeks,
                     nama_lengkap: mengetahuiKiriNama,
+                    ttd_url: mengetahuiKiriUrl,
                 },
                 {
                     posisi_label: "Mengetahui-Kanan",
                     jabatan_teks: mengetahuiKananTeks,
                     nama_lengkap: mengetahuiKananNama,
+                    ttd_url: mengetahuiKananUrl,
                 },
             ],
         });
@@ -220,12 +228,16 @@
             <SectionPenandatangan
                 {ttdKiriTeks}
                 bind:ttdKiriNama
+                bind:ttdKiriUrl
                 {ttdKananTeks}
                 bind:ttdKananNama
+                bind:ttdKananUrl
                 {mengetahuiKiriTeks}
                 bind:mengetahuiKiriNama
+                bind:mengetahuiKiriUrl
                 {mengetahuiKananTeks}
                 bind:mengetahuiKananNama
+                bind:mengetahuiKananUrl
             />
         </div>
 

@@ -45,6 +45,30 @@
             deletingId = null;
         }
     }
+
+    let updatingId = $state(null);
+    async function handleArsipkan(surat) {
+        const konfirmasi = confirm(
+            `Tandai surat "${surat.perihal}" sebagai Selesai / Arsip?`,
+        );
+        if (!konfirmasi) return;
+
+        updatingId = surat.id;
+        try {
+            // Update status ke 'Selesai'. Sesuaikan jika field statusnya beda.
+            const { error } = await supabase
+                .from("surat")
+                .update({ status: "Selesai" })
+                .eq("id", surat.id);
+
+            if (error) throw error;
+            await invalidateAll();
+        } catch (err) {
+            alert(`Gagal mengarsipkan surat: ${err.message}`);
+        } finally {
+            updatingId = null;
+        }
+    }
 </script>
 
 <Card class="border-slate-200 shadow-sm mt-8">
@@ -90,24 +114,55 @@
                         <td class="px-6 py-4">
                             <span
                                 class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                                {surat.status === 'Terkirim'
+                                {surat.status === 'Selesai'
                                     ? 'bg-emerald-50 text-emerald-600'
                                     : 'bg-amber-50 text-amber-600'}"
                             >
-                                {surat.status}
+                                {surat.status === "Selesai"
+                                    ? "Selesai"
+                                    : "Draft"}
                             </span>
                         </td>
                         <td class="px-6 py-4 w-[140px]">
                             <div class="flex items-center justify-center gap-2">
-                                <!-- Tombol Lihat / Cetak -->
+                                <!-- Tombol Selesai / Arsipkan -->
                                 <button
-                                    class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                    title="Lihat Detail / Cetak PDF"
+                                    class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                                    title="Tandai Selesai & Arsipkan"
+                                    disabled={updatingId === surat.id ||
+                                        surat.status === "Selesai"}
+                                    onclick={() => handleArsipkan(surat)}
+                                    aria-label="Tandai Selesai"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        ><path d="m9 12 2 2 4-4" /><path
+                                            d="M5 18v-6a6 6 0 0 1 6-6h2"
+                                        /><path d="M9 16.5 5 21l-4-4.5" /><path
+                                            d="M14 6.5 18 2l4 4.5"
+                                        /><path
+                                            d="M19 18v-6a6 6 0 0 0-6-6h-2"
+                                        /></svg
+                                    >
+                                </button>
+
+                                <!-- Tombol Lihat Detail (dulu Cetak PDF) -->
+                                <button
+                                    class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                                    title="Lihat Detail Surat"
                                     onclick={() =>
-                                        window.open(
-                                            "/cetak/" + surat.id,
-                                            "_blank",
+                                        goto(
+                                            `/kelola-surat/detail/${surat.id}`,
                                         )}
+                                    aria-label="Lihat Detail"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -132,10 +187,11 @@
 
                                 <!-- Tombol Edit -->
                                 <button
-                                    class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                    class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                                     title="Edit Surat"
                                     disabled={deletingId === surat.id}
                                     onclick={() => handleEdit(surat)}
+                                    aria-label="Edit Surat"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -155,10 +211,11 @@
 
                                 <!-- Tombol Hapus -->
                                 <button
-                                    class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                    class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                                     title="Hapus Surat"
                                     disabled={deletingId === surat.id}
                                     onclick={() => handleHapus(surat)}
+                                    aria-label="Hapus Surat"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

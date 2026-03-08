@@ -60,19 +60,41 @@
         ttdKiriNama:
             data.penandatangan.find((p) => p.posisi_label === "Kiri")
                 ?.nama_lengkap ?? "",
+        ttdKiriUrl:
+            data.penandatangan.find((p) => p.posisi_label === "Kiri")
+                ?.ttd_url ?? "",
         ttdKananTeks:
             data.penandatangan.find((p) => p.posisi_label === "Kanan")
-                ?.jabatan_teks ?? "Pembina UKM Kewirausahaan",
+                ?.jabatan_teks ?? "Sekretaris UKM Kewirausahaan",
         ttdKananNama:
             data.penandatangan.find((p) => p.posisi_label === "Kanan")
                 ?.nama_lengkap ?? "",
+        ttdKananUrl:
+            data.penandatangan.find((p) => p.posisi_label === "Kanan")
+                ?.ttd_url ?? "",
         // Kepanitiaan: 4 penandatangan
+        // Kepanitiaan/Bidang Inti: 3/4 penandatangan
         mengetahuiKiriTeks:
-            data.penandatangan.find((p) => p.posisi_label === "Mengetahui-Kiri")
-                ?.jabatan_teks ?? "Ketua UKM Kewirausahaan",
+            data.penandatangan.find(
+                (p) =>
+                    p.posisi_label === "Mengetahui-Kiri" ||
+                    p.posisi_label === "Mengetahui",
+            )?.jabatan_teks ??
+            (data.surat.kategori === "Bidang Inti"
+                ? "Pembina UKM Kewirausahaan"
+                : "Ketua UKM Kewirausahaan"),
         mengetahuiKiriNama:
-            data.penandatangan.find((p) => p.posisi_label === "Mengetahui-Kiri")
-                ?.nama_lengkap ?? "",
+            data.penandatangan.find(
+                (p) =>
+                    p.posisi_label === "Mengetahui-Kiri" ||
+                    p.posisi_label === "Mengetahui",
+            )?.nama_lengkap ?? "",
+        mengetahuiKiriUrl:
+            data.penandatangan.find(
+                (p) =>
+                    p.posisi_label === "Mengetahui-Kiri" ||
+                    p.posisi_label === "Mengetahui",
+            )?.ttd_url ?? "",
         mengetahuiKananTeks:
             data.penandatangan.find(
                 (p) => p.posisi_label === "Mengetahui-Kanan",
@@ -81,6 +103,10 @@
             data.penandatangan.find(
                 (p) => p.posisi_label === "Mengetahui-Kanan",
             )?.nama_lengkap ?? "",
+        mengetahuiKananUrl:
+            data.penandatangan.find(
+                (p) => p.posisi_label === "Mengetahui-Kanan",
+            )?.ttd_url ?? "",
     };
 
     async function onSave(formData) {
@@ -151,6 +177,7 @@
                 posisi_label: ttd.posisi_label,
                 jabatan_teks: ttd.jabatan_teks || "-",
                 nama_lengkap: ttd.nama_lengkap || "-",
+                ttd_url: ttd.ttd_url || null,
             }));
             const { error: ttdError } = await supabase
                 .from("surat_penandatangan")
