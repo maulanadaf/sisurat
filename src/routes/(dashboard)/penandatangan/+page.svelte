@@ -5,6 +5,11 @@
     import TableBidangInti from "$lib/components/penandatangan/TableBidangInti.svelte";
     import TableKepanitiaan from "$lib/components/penandatangan/TableKepanitiaan.svelte";
     import ModalPenandatangan from "$lib/components/penandatangan/ModalPenandatangan.svelte";
+    import {
+        simpanPenandatangan,
+        hapusPenandatangan,
+        toggleStatusAktif,
+    } from "$lib/components/penandatangan/scripts/penandatanganActions";
 
     // --- Data State ---
     let bidangInti = $state([]);
@@ -104,19 +109,6 @@
         ttdPreview = URL.createObjectURL(file);
     }
 
-    async function uploadTtd(file) {
-        const ext = file.name.split(".").pop();
-        const fileName = `${crypto.randomUUID()}.${ext}`;
-        const { data: uploadData, error } = await supabase.storage
-            .from("ttd")
-            .upload(fileName, file, { upsert: false });
-        if (error) throw error;
-        const { data: urlData } = supabase.storage
-            .from("ttd")
-            .getPublicUrl(uploadData.path);
-        return urlData.publicUrl;
-    }
-
     async function handleSimpan() {
         if (!form.nama.trim()) return alert("Nama tidak boleh kosong.");
         if (modalType === "bidang" && !form.jabatan.trim())
@@ -126,47 +118,7 @@
 
         isLoading = true;
         try {
-            let ttd_url = form.ttd_url;
-            if (ttdFile) {
-                ttd_url = await uploadTtd(ttdFile);
-            }
-
-            if (modalType === "bidang") {
-                const payload = {
-                    nama: form.nama,
-                    jabatan: form.jabatan,
-                    periode: form.periode,
-                    is_active: form.is_active,
-                    ttd_url,
-                };
-                if (modalMode === "tambah") {
-                    const { error } = await supabase
-                        .from("ttd_bidang_inti")
-                        .insert(payload);
-                    if (error) throw error;
-                } else {
-                    const { error } = await supabase
-                        .from("ttd_bidang_inti")
-                        .update(payload)
-                        .eq("id", form.id);
-                    if (error) throw error;
-                }
-            } else {
-                const payload = { nama: form.nama, ttd_url };
-                if (modalMode === "tambah") {
-                    const { error } = await supabase
-                        .from("ttd_kepanitiaan")
-                        .insert(payload);
-                    if (error) throw error;
-                } else {
-                    const { error } = await supabase
-                        .from("ttd_kepanitiaan")
-                        .update(payload)
-                        .eq("id", form.id);
-                    if (error) throw error;
-                }
-            }
-
+            await simpanPenandatangan({ form, ttdFile, modalType, modalMode });
             await fetchData();
             closeModal();
         } catch (err) {
@@ -185,34 +137,7 @@
 
         deletingId = item.id;
         try {
-            // Hapus file TTD dari storage terlebih dahulu (jika ada)
-            if (item.ttd_url) {
-                // Ekstrak path file dari public URL
-                // Format URL: .../storage/v1/object/public/ttd/<path>
-                const urlParts = item.ttd_url.split("/ttd/");
-                if (urlParts.length > 1) {
-                    const filePath = urlParts[1];
-                    const { error: storageError } = await supabase.storage
-                        .from("ttd")
-                        .remove([filePath]);
-                    if (storageError) {
-                        console.warn(
-                            "[storage] Gagal hapus file TTD:",
-                            storageError.message,
-                        );
-                    }
-                }
-            }
-
-            // Hapus baris dari tabel database
-            const table =
-                type === "bidang" ? "ttd_bidang_inti" : "ttd_kepanitiaan";
-            const { error } = await supabase
-                .from(table)
-                .delete()
-                .eq("id", item.id);
-            if (error) throw error;
-
+            await hapusPenandatangan({ item, type });
             await fetchData();
         } catch (err) {
             alert(`Gagal menghapus: ${err.message}`);
@@ -223,11 +148,7 @@
 
     async function toggleAktif(item) {
         try {
-            const { error } = await supabase
-                .from("ttd_bidang_inti")
-                .update({ is_active: !item.is_active })
-                .eq("id", item.id);
-            if (error) throw error;
+            await toggleStatusAktif(item);
             await fetchData();
         } catch (err) {
             alert(`Gagal memperbarui status: ${err.message}`);

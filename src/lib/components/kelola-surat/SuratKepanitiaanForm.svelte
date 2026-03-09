@@ -10,6 +10,8 @@
     import SectionIdentitasTujuan from "./kepanitiaan/SectionIdentitasTujuan.svelte";
     import SectionRincianKegiatan from "./kepanitiaan/SectionRincianKegiatan.svelte";
     import SectionPenandatangan from "./kepanitiaan/SectionPenandatangan.svelte";
+    import { onMount } from "svelte";
+    import { getNextNomorUrut } from "$lib/utils/surat";
 
     let { onSave, onCancel, isSaving = false, initialData = null } = $props();
 
@@ -37,7 +39,7 @@
     const currentYear = currentDate.getFullYear();
 
     // === START: State Formulir Kepanitiaan ===
-    let noUrut = $state(initialData?.noUrut ?? "001");
+    let noUrut = $state(initialData?.noUrut ?? "");
     let jenisSurat = $state(initialData?.jenisSurat ?? "SU");
     let namaKegiatan = $state(initialData?.namaKegiatan ?? "");
     let singkatanKegiatan = $state(initialData?.singkatanKegiatan ?? "");
@@ -47,6 +49,12 @@
     let noSurat = $derived(
         `${noUrut}/${jenisSurat}/${singkatanKegiatan || "<Kegiatan>"}/${atributSurat || "<Atribut>"}`,
     );
+
+    onMount(async () => {
+        if (!initialData?.noUrut) {
+            noUrut = await getNextNomorUrut("Kepanitiaan");
+        }
+    });
 
     let lampiran = $state(initialData?.lampiran ?? "-");
     let perihal = $state(initialData?.perihal ?? "");

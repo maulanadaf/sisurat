@@ -68,6 +68,8 @@
                     placeholder="Singkatan Kegiatan"
                     required
                     class="flex-1 min-w-[100px] bg-slate-50 focus:border-emerald-500"
+                    oninput={(e) =>
+                        (singkatanKegiatan = e.target.value.toUpperCase())}
                 />
                 <span class="text-slate-400 font-bold shrink-0">/</span>
                 <Input

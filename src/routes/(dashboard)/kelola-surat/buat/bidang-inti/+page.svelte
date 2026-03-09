@@ -23,8 +23,6 @@
                         perihal: data.perihal,
                         tgl_surat: data.tglSurat,
                         kepada: data.kepada,
-                        tempat_surat: data.tempatSurat,
-                        lokasi_tujuan: data.lokasiTujuan,
                     },
                 ])
                 .select()

@@ -10,6 +10,8 @@
     import SectionIdentitasTujuan from "./bidang-inti/SectionIdentitasTujuan.svelte";
     import SectionRincianKegiatan from "./bidang-inti/SectionRincianKegiatan.svelte";
     import SectionPenandatangan from "./bidang-inti/SectionPenandatangan.svelte";
+    import { onMount } from "svelte";
+    import { getNextNomorUrut } from "$lib/utils/surat";
 
     let { onSave, onCancel, isSaving = false, initialData = null } = $props();
 
@@ -39,12 +41,18 @@
 
     // === START: State Formulir Bidang Inti ===
     // Jika initialData ada (mode edit), pakai nilainya; jika tidak, pakai default
-    let noUrut = $state(initialData?.noUrut ?? "001");
+    let noUrut = $state(initialData?.noUrut ?? "");
     let jenisSurat = $state(initialData?.jenisSurat ?? "SU");
     let atributSurat = $state(
         initialData?.atributSurat ?? `UKMK-YDK/${currentRomawi}/${currentYear}`,
     );
     let noSurat = $derived(`${noUrut}/${jenisSurat}/${atributSurat}`);
+
+    onMount(async () => {
+        if (!initialData?.noUrut) {
+            noUrut = await getNextNomorUrut("Bidang Inti");
+        }
+    });
 
     let lampiran = $state(initialData?.lampiran ?? "-");
     let perihal = $state(initialData?.perihal ?? "");
