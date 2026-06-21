@@ -84,7 +84,7 @@
   </div>
 
   <p
-    style="font-family: 'Times New Roman', Times, serif; font-size: 9pt; line-height: 1.3;"
+    style="font-family: 'Times New Roman', Times, serif; font-size: 8pt; line-height: 1.3;"
     class="text-center w-full -mt-2 pb-1 text-black"
   >
     Jl. Salem no 03 Kersikan, Telp (0343) 749266 &ndash; 087715728111, Bangil

@@ -161,7 +161,7 @@
         }
 
         .content-wrapper {
-            padding: 0.75cm 2cm 2cm 2cm !important;
+            padding: 0.75cm 1.5cm 0.5cm 1.5cm !important;
         }
     }
 </style>
