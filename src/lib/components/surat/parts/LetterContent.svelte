@@ -192,7 +192,7 @@
      SALAM PENUTUP
      ============================== -->
 <p
-    style="font-style: italic; font-weight: bold; margin-top: 10pt; margin-bottom: 20pt;"
+    style="font-style: italic; font-weight: bold; margin-top: 10pt; margin-bottom: 4pt;"
 >
     Wassalamu&rsquo;alaikum Wr. Wb.
 </p>

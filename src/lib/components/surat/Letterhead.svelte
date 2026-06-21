@@ -4,10 +4,10 @@
 </script>
 
 <!-- Letterhead / Kop Surat -->
-<div class="kop-surat font-serif text-black -mx-4 md:-mx-8">
+<div class="kop-surat font-serif text-black -mx-8">
   <div class="flex justify-between items-center gap-2 pb-2 w-full">
     <!-- Logo Kiri: ITB Yadika -->
-    <div class="w-[90px] md:w-[100px] shrink-0 flex-none">
+    <div class="w-[100px] shrink-0 flex-none">
       <img
         src={logoItb}
         alt="Logo ITB Yadika Pasuruan"
@@ -26,7 +26,7 @@
         Institut Teknologi & Bisnis Yadika Pasuruan
       </h2>
       <h1
-        class="font-bold tracking-wide uppercase text-black whitespace-nowrap"
+        class="font-bold tracking-wide uppercase text-black"
         style="font-family: 'Times New Roman', Times, serif; font-size: 14pt; line-height: 1.1; color: black;"
       >
         Unit Kegiatan Mahasiswa Kewirausahaan
@@ -74,7 +74,7 @@
     </div>
 
     <!-- Logo Kanan: UKM Kewirausahaan -->
-    <div class="w-[90px] md:w-[100px] shrink-0 flex-none">
+    <div class="w-[100px] shrink-0 flex-none">
       <img
         src={logoUkm}
         alt="Logo UKM Kewirausahaan ITB Yadika Pasuruan"
@@ -85,7 +85,7 @@
 
   <p
     style="font-family: 'Times New Roman', Times, serif; font-size: 9pt; line-height: 1.3;"
-    class="text-center w-full -mt-2 pb-1 whitespace-nowrap text-black"
+    class="text-center w-full -mt-2 pb-1 text-black"
   >
     Jl. Salem no 03 Kersikan, Telp (0343) 749266 &ndash; 087715728111, Bangil
     &ndash; Pasuruan 67153, <i class="italic">email:</i>

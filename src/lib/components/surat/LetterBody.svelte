@@ -59,19 +59,23 @@
         mengetahuiKananNama = "",
         mengetahuiKananUrl = "",
         daftarAlat = [],
+        status = "Draft",
+        showQr = false,
     } = $props();
 
     let qrUrl = $state("");
 
     onMount(async () => {
-        try {
-            // Hasilkan QR Code yang berisi URL halaman view/cetak saat ini
-            qrUrl = await QRCode.toDataURL(window.location.href, {
-                margin: 1,
-                width: 100,
-            });
-        } catch (err) {
-            console.error("Gagal membuat QR Code:", err);
+        if (showQr && status === "Selesai") {
+            try {
+                // Hasilkan QR Code yang berisi URL halaman view/cetak saat ini
+                qrUrl = await QRCode.toDataURL(window.location.href, {
+                    margin: 1,
+                    width: 100,
+                });
+            } catch (err) {
+                console.error("Gagal membuat QR Code:", err);
+            }
         }
     });
 </script>

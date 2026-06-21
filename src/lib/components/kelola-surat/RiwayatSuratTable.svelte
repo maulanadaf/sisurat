@@ -8,14 +8,16 @@
     } from "$lib/components/UI/card";
     import { goto, invalidateAll } from "$app/navigation";
     import { supabase } from "$lib/supabaseClient";
+    import { getNextNomorUrut } from "$lib/utils/surat";
 
     let { data = [] } = $props();
 
     let deletingId = $state(null);
 
+    let showAll = $state(false);
     const MAX_RIWAYAT = 5;
-    const displayed = $derived(data.slice(0, MAX_RIWAYAT));
-    const sisaCount = $derived(data.length - MAX_RIWAYAT);
+    const displayed = $derived(showAll ? data : data.slice(0, MAX_RIWAYAT));
+    const sisaCount = $derived(showAll ? 0 : data.length - MAX_RIWAYAT);
 
     function handleEdit(surat) {
         goto(`/kelola-surat/edit/${surat.id}`);
@@ -69,6 +71,72 @@
             updatingId = null;
         }
     }
+
+    let duplicatingId = $state(null);
+    async function handleDuplikat(suratSummary) {
+        const konfirmasi = confirm(
+            `Duplikat surat "${suratSummary.perihal}"?\nSurat baru akan otomatis mendapatkan nomor urut terbaru.`,
+        );
+        if (!konfirmasi) return;
+
+        duplicatingId = suratSummary.id;
+        try {
+            // 1. Fetch data original
+            const { data: originalSurat, error: errSurat } = await supabase.from('surat').select('*').eq('id', suratSummary.id).single();
+            if (errSurat) throw errSurat;
+
+            const { data: originalKonten } = await supabase.from('surat_konten').select('*').eq('surat_id', suratSummary.id).single();
+            const { data: originalAlat } = await supabase.from('surat_alat').select('*').eq('surat_id', suratSummary.id);
+            const { data: originalTtd } = await supabase.from('surat_penandatangan').select('*').eq('surat_id', suratSummary.id);
+
+            // 2. Generate nomor baru
+            const nextNoUrut = await getNextNomorUrut(originalSurat.kategori);
+            const newNoSuratFull = `${nextNoUrut}/${originalSurat.jenis_surat}/${originalSurat.atribut_surat}`;
+
+            // 3. Insert surat baru
+            const { id: _, created_at: __, ...suratTanpaId } = originalSurat;
+            const { data: newSurat, error: errNewSurat } = await supabase
+                .from('surat')
+                .insert([{ 
+                    ...suratTanpaId, 
+                    nomor_urut: nextNoUrut, 
+                    nomor_surat_full: newNoSuratFull,
+                    status: 'Draft', // Set kembali ke Draft
+                    tgl_surat: new Date().toISOString().split("T")[0] // Set tanggal ke hari ini
+                }])
+                .select()
+                .single();
+            if (errNewSurat) throw errNewSurat;
+            
+            const newSuratId = newSurat.id;
+
+            // 4. Insert konten
+            if (originalKonten) {
+                const { id: _kId, surat_id: _kSId, ...kontenTanpaId } = originalKonten;
+                await supabase.from('surat_konten').insert([{ ...kontenTanpaId, surat_id: newSuratId }]);
+            }
+
+            // 5. Insert alat
+            if (originalAlat && originalAlat.length > 0) {
+                const alatPayload = originalAlat.map(({id, surat_id, ...rest}) => ({ ...rest, surat_id: newSuratId }));
+                await supabase.from('surat_alat').insert(alatPayload);
+            }
+
+            // 6. Insert penandatangan
+            if (originalTtd && originalTtd.length > 0) {
+                const ttdPayload = originalTtd.map(({id, surat_id, ...rest}) => ({ ...rest, surat_id: newSuratId }));
+                await supabase.from('surat_penandatangan').insert(ttdPayload);
+            }
+
+            alert("Surat berhasil diduplikasi!");
+            await invalidateAll();
+        } catch (err) {
+            alert(`Gagal menduplikat surat: ${err.message}`);
+            console.error(err);
+        } finally {
+            duplicatingId = null;
+        }
+    }
 </script>
 
 <Card class="border-slate-200 shadow-sm mt-8">
@@ -87,6 +155,7 @@
                 <tr>
                     <th class="px-6 py-4">No. Surat</th>
                     <th class="px-6 py-4">Tanggal</th>
+                    <th class="px-6 py-4">Kategori & Jenis</th>
                     <th class="px-6 py-4">Pihak Tujuan</th>
                     <th class="px-6 py-4">Perihal</th>
                     <th class="px-6 py-4">Status</th>
@@ -104,6 +173,12 @@
                         <td class="px-6 py-4 text-slate-500 whitespace-nowrap"
                             >{surat.tanggal}</td
                         >
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {surat.kategori === 'Kepanitiaan' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}">
+                                {surat.kategori}
+                            </span>
+                            <div class="text-[10px] text-slate-500 mt-0.5 pl-1">{surat.jenisSurat}</div>
+                        </td>
                         <td class="px-6 py-4 text-slate-700">{surat.pihak}</td>
                         <td
                             class="px-6 py-4 text-slate-600 max-w-[200px] truncate"
@@ -185,6 +260,19 @@
                                     </svg>
                                 </button>
 
+                                <!-- Tombol Duplikat -->
+                                <button
+                                    class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                                    title="Duplikat Surat"
+                                    disabled={duplicatingId === surat.id}
+                                    onclick={() => handleDuplikat(surat)}
+                                    aria-label="Duplikat Surat"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                                    </svg>
+                                </button>
+
                                 <!-- Tombol Edit -->
                                 <button
                                     class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
@@ -240,7 +328,7 @@
                 {#if data.length === 0}
                     <tr>
                         <td
-                            colspan="6"
+                            colspan="7"
                             class="px-6 py-12 text-center text-slate-400"
                         >
                             Belum ada riwayat pencatatan surat keluar.
@@ -256,11 +344,11 @@
                 <span class="text-slate-500">
                     + {sisaCount} surat lainnya tidak ditampilkan
                 </span>
-                <a
-                    href="/arsip"
-                    class="text-[var(--primary)] hover:underline font-medium flex items-center gap-1"
+                <button
+                    onclick={() => showAll = true}
+                    class="text-[var(--primary)] hover:underline font-medium flex items-center gap-1 cursor-pointer"
                 >
-                    Lihat semua di Arsip Surat
+                    Tampilkan Semua Surat
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-3.5 h-3.5"
@@ -272,10 +360,10 @@
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M9 5l7 7-7 7"
+                            d="M19 9l-7 7-7-7"
                         />
                     </svg>
-                </a>
+                </button>
             </div>
         {/if}
     </CardContent>

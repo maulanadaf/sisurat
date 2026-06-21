@@ -3,7 +3,7 @@ import { supabase } from '$lib/supabaseClient';
 export async function load() {
     let { data, error } = await supabase
         .from('surat')
-        .select('id, nomor_surat_full, tgl_surat, kepada, perihal, kategori, status')
+        .select('id, nomor_surat_full, tgl_surat, kepada, perihal, kategori, jenis_surat, status')
         .order('created_at', { ascending: false });
 
     // Fallback jika kolom status belum ada di Supabase
@@ -11,7 +11,7 @@ export async function load() {
         console.warn('[kelola-surat] Kolom status tidak ditemukan, melakukan fallback query...');
         const fallback = await supabase
             .from('surat')
-            .select('id, nomor_surat_full, tgl_surat, kepada, lokasi_tujuan, perihal, kategori')
+            .select('id, nomor_surat_full, tgl_surat, kepada, lokasi_tujuan, perihal, kategori, jenis_surat')
             .order('created_at', { ascending: false });
         data = fallback.data;
         error = fallback.error;
@@ -31,6 +31,7 @@ export async function load() {
         pihak: s.kepada ?? '-',
         perihal: s.perihal ?? '-',
         kategori: s.kategori ?? '-',
+        jenisSurat: s.jenis_surat ?? '-',
         status: s.status ?? 'Draft', // default ke Draft jika belum ada nilainya
     }));
 

@@ -23,7 +23,7 @@
 <!-- ==============================
      BARIS IDENTITAS SURAT
      ============================== -->
-<table class="w-full mb-4" style="border-collapse: collapse;">
+<table class="w-full mb-2" style="border-collapse: collapse;">
     <tbody>
         <!-- Kiri: No, Lampiran, Perihal | Kanan: Tempat & Tanggal -->
         <tr>

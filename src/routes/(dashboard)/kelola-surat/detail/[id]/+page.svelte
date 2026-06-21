@@ -95,7 +95,7 @@
             <div class="content-wrapper">
                 <Letterhead />
 
-                <div class="mt-8">
+                <div class="mt-4">
                     <!-- Note: LetterBody is responsive by default, but paper-preview fixes width to roughly F4 -->
                     <LetterBody
                         noSurat={surat.nomor_surat_full}
@@ -133,6 +133,7 @@
                             jumlah: a.jumlah,
                         }))}
                         {isKepanitiaan}
+                        status={surat.status}
                     />
                 </div>
             </div>

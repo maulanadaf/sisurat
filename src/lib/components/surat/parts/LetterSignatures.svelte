@@ -18,7 +18,7 @@
 <!-- ==============================
      BLOK PENANDATANGAN
      ============================== -->
-<div style="display: flex; justify-content: space-around; margin-top: 8pt;">
+<div style="display: flex; justify-content: space-around; margin-top: 4pt;">
     <!-- Kiri (Panitia/Bidang Inti) -->
     <div style="text-align: center; min-width: 160px;">
         {#if ttdKiriTeks}
@@ -86,7 +86,7 @@
 <!-- Mengetahui (baris kedua, jika ada) -->
 {#if mengetahuiKiriTeks || mengetahuiKananTeks}
     <p
-        style="margin-bottom: 0; font-style: italic; margin-top: 28pt; text-align: center;"
+        style="margin-bottom: 0; font-style: italic; margin-top: 12pt; text-align: center;"
     >
         Mengetahui,
     </p>

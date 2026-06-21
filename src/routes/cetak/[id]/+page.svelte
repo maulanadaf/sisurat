@@ -65,7 +65,7 @@
         <div class="content-wrapper">
             <Letterhead />
 
-            <div class="mt-8">
+            <div class="mt-4">
                 <LetterBody
                     noSurat={surat.nomor_surat_full}
                     tglSurat={surat.tgl_surat}
@@ -97,6 +97,8 @@
                         nama: a.nama_alat,
                         jumlah: a.jumlah,
                     }))}
+                    status={surat.status}
+                    showQr={true}
                 />
             </div>
         </div>
